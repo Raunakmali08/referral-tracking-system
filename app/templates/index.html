@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | RefTrack</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+    <div id="app" class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="/" class="logo">Ref<span>Track</span></a>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" data-view="dashboard">
+                        <i class="fa-solid fa-chart-line"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-view="campaigns">
+                        <i class="fa-solid fa-link"></i> My Links
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-view="leaderboard">
+                        <i class="fa-solid fa-trophy"></i> Leaderboard
+                    </a>
+                </li>
+                <li class="nav-item" style="margin-top: 2rem;">
+                    <a href="#" class="nav-link" id="btn-logout">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 id="view-title">Dashboard Overview</h1>
+                    <p class="stat-label">Welcome back, <span id="user-display-name">...</span></p>
+                </div>
+                <div class="user-profile">
+                    <div id="user-avatar" class="user-avatar">??</div>
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div id="view-dashboard" class="view-section">
+                <!-- Stat Cards -->
+                <div class="stats-grid">
+                    <div class="glass-card stat-card fade-in" style="animation-delay: 0.1s;">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Clicks</span>
+                            <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                                <i class="fa-solid fa-mouse-pointer"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="stat-total-clicks">0</div>
+                        <div class="stat-change up"><i class="fa-solid fa-arrow-up"></i> 12% increase</div>
+                    </div>
+
+                    <div class="glass-card stat-card fade-in" style="animation-delay: 0.2s;">
+                        <div class="stat-header">
+                            <span class="stat-label">Unique Visitors</span>
+                            <div class="stat-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="stat-unique-clicks">0</div>
+                        <div class="stat-change"><span style="color: #94a3b8">Across all campaigns</span></div>
+                    </div>
+
+                    <div class="glass-card stat-card fade-in" style="animation-delay: 0.3s;">
+                        <div class="stat-header">
+                            <span class="stat-label">Conversions</span>
+                            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="stat-total-conversions">0</div>
+                        <div class="stat-change up" id="stat-conversion-rate">0.0% rate</div>
+                    </div>
+
+                    <div class="glass-card stat-card fade-in" style="animation-delay: 0.4s;">
+                        <div class="stat-header">
+                            <span class="stat-label">Estimated Revenue</span>
+                            <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                                <i class="fa-solid fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="stat-value" id="stat-total-value">$0.00</div>
+                        <div class="stat-change"><span style="color: #94a3b8">Lifetime value</span></div>
+                    </div>
+                </div>
+
+                <!-- Main Chart -->
+                <div class="glass-card chart-container fade-in" style="animation-delay: 0.5s;">
+                    <div class="card-header">
+                        <h2>Performance Over Time</h2>
+                        <span class="stat-label">Last 30 Days</span>
+                    </div>
+                    <canvas id="performanceChart" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- Campaigns Table -->
+            <div id="view-campaigns" class="view-section hidden">
+                <div class="glass-card campaigns-card">
+                    <div class="card-header">
+                        <h2>My Referral & Campaign Links</h2>
+                        <button class="btn-primary" id="open-create-modal">
+                            <i class="fa-solid fa-plus"></i> Create New Link
+                        </button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Campaign Name</th>
+                                    <th>Referral Code</th>
+                                    <th>Short Link</th>
+                                    <th>Clicks</th>
+                                    <th>CR %</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="campaigns-table-body">
+                                <!-- Data injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard View -->
+            <div id="view-leaderboard" class="view-section hidden">
+                <div class="glass-card">
+                    <div class="card-header">
+                        <h2>Global Leaderboard</h2>
+                        <p class="stat-label">Top performing referrers</p>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Username</th>
+                                    <th>Total Conversions</th>
+                                    <th>Generated Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-table-body">
+                                <!-- Data injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Create Referral Modal -->
+    <div id="create-modal" class="modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h2>Generate New Referral</h2>
+                <p class="stat-label">Track traffic for specific sources or influencers.</p>
+            </div>
+            <form id="create-referral-form">
+                <div class="form-group">
+                    <label>Campaign Name / Source</label>
+                    <input type="text" id="campaign-name" placeholder="e.g. twitter-post, spring-promo" required>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" class="btn-logout" id="close-modal">Cancel</button>
+                    <button type="submit" class="btn-primary" style="flex: 1;">Generate Link</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

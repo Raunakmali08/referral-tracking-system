@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
@@ -8,7 +8,7 @@ migrate = Migrate()
 
 
 def create_app(config_name=None):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='templates', static_folder='static')
 
     # ── Config ──────────────────────────────────────────────
     app.config['SECRET_KEY']                  = os.environ.get('SECRET_KEY', 'dev-secret')
@@ -30,6 +30,15 @@ def create_app(config_name=None):
     app.register_blueprint(analytics_bp, url_prefix='/api/analytics')
     app.register_blueprint(webhook_bp,   url_prefix='/api/webhooks')
 
+    # ── Frontend Routes ──────────────────────────────────────
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    @app.route('/login')
+    def login_page():
+        return render_template('login.html')
+
     # ── Health check ─────────────────────────────────────────
     @app.route('/health')
     def health():
@@ -40,3 +49,4 @@ def create_app(config_name=None):
         db.create_all()
 
     return app
+
