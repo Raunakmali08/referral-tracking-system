@@ -1,96 +1,77 @@
-# Referral Tracking System
+# Project Overview
+This is a referral tracking system designed to help users manage referrals effectively.
 
-## Project Overview
-This project is designed to track referrals and provide insights into referral patterns. It allows users to manage their referral programs efficiently and effectively.
+# Technology Stack
+- **Python Flask**: A lightweight WSGI web application framework.
+- **PostgreSQL**: An open-source relational database management system.
+- **Docker**: A platform used to develop, ship, and run applications in containers.
 
-## Technology Stack
-- **Frontend:** React.js
-- **Backend:** Node.js, Express
-- **Database:** MongoDB
-- **Containerization:** Docker
-
-## Prerequisites
-Before you begin, ensure you have met the following requirements:
-- Node.js (v12 or above)
-- MongoDB (local or remote)
-- Docker (if using Docker)
-- Git
-
-## Quick Start Guide
-### Docker
+# Quick Start Guides
+## Using Docker
 1. Clone the repository:
    ```bash
    git clone https://github.com/Raunakmali08/referral-tracking-system.git
    cd referral-tracking-system
    ```
-2. Build and run the Docker containers:
+2. Build and run the Docker container:
    ```bash
    docker-compose up --build
    ```
-3. Access the application at http://localhost:3000.
 
-### Local Development
+## Local Development
 1. Clone the repository:
    ```bash
    git clone https://github.com/Raunakmali08/referral-tracking-system.git
    cd referral-tracking-system
    ```
-2. Install dependencies:
+2. Create a virtual environment and activate it:
    ```bash
-   npm install
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
-3. Start the development server:
+3. Install dependencies:
    ```bash
-   npm start
+   pip install -r requirements.txt
    ```
-4. Access the application at http://localhost:3000.
+4. Set up the database and run the application:
+   ```bash
+   python app.py
+   ```
 
-## Project Structure
-```
-referral-tracking-system/
-├── server/
-│   ├── models/
-│   ├── routes/
-│   ├── controllers/
-│   ├── config/
-│   └── index.js
-├── client/
-│   ├── src/
-│   ├── public/
-│   └── package.json
-└── docker-compose.yml
-```
+# Installation Instructions
+Make sure to have Python and PostgreSQL installed on your machine. Follow the steps in the quick start guide to set up the environment.
 
-## Configuration
-Configuration files are located in the `config` directory within the server. You can set environment variables in a `.env` file for local development.
+# Project Structure
+- `/app`: Contains the main application code.
+- `/tests`: Contains unit and integration tests.
+- `/docker`: Contains Docker configuration files.
 
-## Running the Application
-To run the application, make sure you have completed the prerequisites and follow the Quick Start guide. You can also run unit tests using:
+# Configuration
+Adjust settings in the `config.py` to customize application behavior including database connection and other settings.
+
+# Running the Application
+Run the application using:
 ```bash
-npm test
+python app.py
 ```
 
-## API Usage
-### Endpoints
-- **GET /api/referrals** - Retrieve all referrals
-- **POST /api/referrals** - Create a new referral
+# API Usage Examples
+- **Get All Referrals**:
+   ```bash
+   curl -X GET http://localhost:5000/api/referrals
+   ```
+- **Create a Referral**:
+   ```bash
+   curl -X POST http://localhost:5000/api/referrals -d '{"name":"John Doe"}'
+   ```
 
-### Example Request
-```bash
-curl -X POST http://localhost:3000/api/referrals -H 'Content-Type: application/json' -d '{"name": "John Doe", "email": "john@example.com"}'
-```
+# Troubleshooting Guide
+- If you have issues connecting to the database, ensure your PostgreSQL server is running and configurations are correct in `config.py`.
+- For Docker issues, check if Docker daemon is running and configurations in `docker-compose.yml`.
 
-## Troubleshooting
-If you encounter issues, consider checking the following:
-- Ensure MongoDB is running.
-- Check the server logs for errors.
-
-## Contribution Guidelines
-To contribute to the project, please follow these steps:
+# Contribution Guidelines
+We welcome contributions! Please follow the standard open-source practices:
 1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-YourFeature`).
-3. Commit your changes (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature-YourFeature`).
-5. Open a pull request.
-
-Thank you for contributing to the Referral Tracking System!
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch and open a pull request.
